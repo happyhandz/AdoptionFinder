@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The PC app speaks plain HTTP. Over Tailscale the traffic is already inside an encrypted WireGuard
+     tunnel; on home Wi-Fi it stays on your own network. Every request also needs the private token. -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

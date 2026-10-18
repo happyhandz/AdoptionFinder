@@ -1,0 +1,19 @@
+{
+  "name": "PAWS Lynnwood",
+  "org": "PAWS Progressive Animal Welfare Society",
+  "location": {"zip": "98087"},
+  "urls": ["https://www.paws.org/adopt/dogs/"],
+  "mode": "css",
+  "require": ["id", "photo"],
+  "items": "article.card-block__item",
+  "fields": {
+    "id": {"sel": ":scope", "attr": "id", "regex": "animal-(\\d+)"},
+    "name": "h3.card-block__title",
+    "url": "a.card-block__link@href",
+    "photo": "img.card-block__img-animal@src",
+    "sex": {"sel": ".card-block__main-info", "regex": "(Female|Male)"},
+    "breed": {"sel": ".card-block__main-info", "regex": "(?:Spayed|Neutered|Intact|Unknown)\\s*(.*?)(?:\\s+\\d+\\s+(?:year|month|week)|\\s*$)"},
+    "age": {"sel": ".card-block__main-info", "regex": "(\\d+\\s+(?:year|month|week)s?(?:\\s+\\d+\\s+(?:month|week)s?)?)"},
+    "size": {"sel": ".card-block__main-info", "regex": "(Small|Medium|Large)"}
+  }
+}

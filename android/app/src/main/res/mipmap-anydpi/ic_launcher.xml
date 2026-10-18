@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- blue disc -->
+    <path
+        android:fillColor="#2F6FED"
+        android:pathData="M54,54m-52,0a52,52 0 1,0 104,0a52,52 0 1,0 -104,0" />
+    <!-- paw: pad -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M33,70a21,16 0 1,0 42,0a21,16 0 1,0 -42,0" />
+    <!-- paw: toes -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M25,50a7,9 0 1,0 14,0a7,9 0 1,0 -14,0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M39,38a7,9 0 1,0 14,0a7,9 0 1,0 -14,0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M55,38a7,9 0 1,0 14,0a7,9 0 1,0 -14,0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M69,50a7,9 0 1,0 14,0a7,9 0 1,0 -14,0" />
+</vector>

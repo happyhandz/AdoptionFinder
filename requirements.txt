@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+httpx
+apscheduler
+pytest
+curl_cffi
+beautifulsoup4
+lxml
+pillow
+qrcode

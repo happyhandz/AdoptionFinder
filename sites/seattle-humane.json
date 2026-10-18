@@ -1,0 +1,21 @@
+{
+  "name": "Seattle Humane",
+  "org": "Seattle Humane",
+  "location": {"zip": "98005"},
+  "urls": ["https://seahumane-adoption-service-proxy.fly.dev/AdoptableSearch?sex=A&ageGroup=All&location=&site=Adoptions&onhold=A&orderby=ID&primaryBreed=All&secondaryBreed=All&specialNeeds=A&noDogs=A&noCats=A&noKids=A&stageID=2&speciesID=1"],
+  "mode": "json",
+  "items": "arrayOfXmlNode.xmlNode",
+  "require": ["id"],
+  "breed_split": false,
+  "fields": {
+    "id": "adoptableSearch.id",
+    "name": "adoptableSearch.name",
+    "sex": "adoptableSearch.sex",
+    "breed": "adoptableSearch.primaryBreed",
+    "breed2": "adoptableSearch.secondaryBreed",
+    "age": {"path": "adoptableSearch.age", "suffix": " months"},
+    "photo": "adoptableSearch.photo",
+    "species": "adoptableSearch.species",
+    "url": {"path": "nothing", "default": "https://www.seattlehumane.org/adoption/find-a-pet/"}
+  }
+}

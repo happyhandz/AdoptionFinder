@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adoption Finder</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header>
+  <h1>🐕 Adoption Finder</h1>
+  <div id="sources"></div>
+  <span id="updated"></span>
+  <label id="interval-wrap" title="How often to check the sources for new dogs">Auto-refresh
+    <select id="interval">
+      <option value="5">5 min</option><option value="10">10 min</option><option value="15">15 min</option>
+      <option value="30">30 min</option><option value="60">1 hour</option><option value="120">2 hours</option>
+      <option value="360">6 hours</option><option value="720">12 hours</option><option value="1440">24 hours</option>
+    </select></label>
+  <button id="pf-open" class="ghost" type="button" title="Scrub Petfinder automatically in a Chrome window">Petfinder</button>
+  <button id="cl-open" class="ghost" type="button" title="Remove dogs that are no longer listed">Check listings</button>
+  <button id="refresh">⟳ Refresh</button>
+  <button id="toggle-filters" class="only-mobile">Filters</button>
+</header>
+<div id="banner" hidden></div>
+<main>
+  <div id="filters-backdrop" hidden></div>
+  <aside id="filters">
+    <div class="sheet-head only-mobile"><b>Filters</b><button id="filters-done" type="button">Show results</button></div>
+    <div class="group">
+      <label>Saved searches</label>
+      <select id="saved"><option value="">— none selected —</option></select>
+      <div class="row">
+        <button id="save-new">Save as…</button>
+        <button id="save-update">Update</button>
+        <button id="save-delete">Delete</button>
+      </div>
+    </div>
+    <div class="group">
+      <label for="location">Location (ZIP or City, ST)</label>
+      <input id="location" placeholder="98031 or Kent, WA">
+      <label for="radius">Within <b id="radius-val">50</b> miles</label>
+      <input id="radius" type="range" min="5" max="200" step="5" value="50">
+      <label class="inline"><input type="checkbox" id="statewide"> Whole state (ignore distance)</label>
+    </div>
+    <div class="group" id="sources-group">
+      <label>Sources <button class="link" id="sources-all" type="button">show all</button></label>
+      <div id="sources-filter" class="srclist"></div>
+    </div>
+    <div class="group"><label for="breed">Breed (comma between breeds, <code>_</code> inside a name, <code>-</code> excludes)</label><div class="acwrap"><input id="breed" placeholder="labrador_retriever, -chihuahua" autocomplete="off"><div id="breed-list" hidden></div></div></div>
+    <div class="group"><label for="color">Color</label><input id="color" placeholder="black, brindle"></div>
+    <div class="group">
+      <label>Age</label>
+      <div class="checks" id="age">
+        <label><input type="checkbox" value="puppy"> Puppy</label>
+        <label><input type="checkbox" value="young"> Young</label>
+        <label><input type="checkbox" value="adult"> Adult</label>
+        <label><input type="checkbox" value="senior"> Senior</label>
+      </div>
+    </div>
+    <div class="group two">
+      <div><label for="sex">Sex</label><select id="sex"><option value="">Any</option><option>male</option><option>female</option></select></div>
+      <div><label for="size">Size</label><select id="size"><option value="">Any</option><option>small</option><option>medium</option><option>large</option><option>xlarge</option></select></div>
+    </div>
+    <div class="group two">
+      <div><label for="max_days">Listed within</label>
+        <select id="max_days"><option value="">Any time</option><option value="1">1 day</option><option value="3">3 days</option><option value="7">7 days</option><option value="14">14 days</option><option value="30">30 days</option></select></div>
+      <div><label for="transport">Transport</label>
+        <select id="transport"><option value="include">Include</option><option value="only">Transport only</option><option value="exclude">Exclude</option></select></div>
+    </div>
+    <div class="group" id="undated-wrap" hidden><label class="inline" title="Some sources (Seattle Humane, PAWS) don't publish a listing date"><input type="checkbox" id="include_undated"> Also show dogs with no listing date</label></div>
+    <div class="group"><label for="q">Keyword</label><input id="q" placeholder="name, description…"></div>
+    <div class="group"><label for="sort">Sort</label>
+      <select id="sort"><option value="newest">Newest</option><option value="closest">Closest</option><option value="youngest">Youngest</option></select>
+      <label class="inline" id="undated-last-wrap" title="Dogs whose source gives no listing date (Seattle Humane, PAWS, Petfinder imports) are shown at the top by default"><input type="checkbox" id="undated_last"> Undated dogs last</label></div>
+    <button id="reset" class="link">Reset filters</button>
+  </aside>
+  <section>
+    <div id="summary"></div>
+    <div id="grid"></div>
+  </section>
+</main>
+<div id="pf-modal" hidden><div class="panel pf-panel">
+  <button id="pf-close" aria-label="Close" type="button">&times;</button>
+  <h2>Petfinder</h2>
+  <p class="meta">Opens a Chrome window on your PC and walks your Petfinder searches page by page, the way you do by hand with the bookmark.
+    It runs only when you press a button here, and waits several seconds between pages.</p>
+  <label for="pf-urls">Search URLs, one per line (the filters are in the URL)</label>
+  <textarea id="pf-urls" rows="4" spellcheck="false"></textarea>
+  <div class="row"><button id="pf-save" type="button">Save URLs</button></div>
+  <div id="pf-scrubbed" class="meta"></div>
+  <div class="row pf-pace"><label for="pf-pace">Pause between pages</label>
+    <select id="pf-pace"><option value="fast">Fast (2-4 s)</option><option value="normal">Normal (6-11 s)</option><option value="gentle">Gentle (12-20 s)</option></select>
+    <span id="pf-eta" class="meta"></span></div>
+  <div class="row pf-actions">
+    <button id="pf-update" type="button" title="Newest pages first, stopping when it reaches dogs from the last scrub (the first run does every page)">Check for new dogs</button>
+    <button id="pf-full" type="button" title="Every page of every search; dogs that are no longer listed are removed">Full scrub</button>
+    <button id="pf-stop" type="button" disabled>Stop</button>
+  </div>
+  <div id="pf-progress" hidden>
+    <div id="pf-host" class="meta"></div>
+    <div class="bar"><div id="pf-bar"></div></div>
+    <div id="pf-status"></div>
+    <pre id="pf-log"></pre>
+  </div>
+  <p class="meta" id="pf-last"></p>
+  <p class="meta"><a href="/import" target="_blank">Manual import with the bookmark</a></p>
+</div></div>
+<div id="cl-modal" hidden><div class="panel pf-panel">
+  <button id="cl-close" aria-label="Close" type="button">&times;</button>
+  <h2>Check for removed dogs</h2>
+  <p class="meta">Asks every source for its current list and removes dogs that are no longer on it (adopted or taken down).
+    Regular refreshes only add and update dogs; they never remove any. Petfinder is not covered: its dogs leave with a Full scrub or after 14 days without an import.</p>
+  <p class="meta" id="cl-next"></p>
+  <div class="row pf-actions"><button id="cl-run" type="button">Run check now</button></div>
+  <div id="cl-progress" hidden>
+    <div class="bar"><div id="cl-bar" class="indeterminate"></div></div>
+    <div id="cl-status"></div>
+  </div>
+  <div id="cl-sources"></div>
+  <p class="meta" id="cl-last"></p>
+</div></div>
+<div id="modal" hidden><div class="panel"><button id="close" aria-label="Close">×</button><div id="detail"></div></div></div>
+<div id="toast" hidden></div>
+<script src="/static/app.js"></script>
+</body>
+</html>
